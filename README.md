@@ -15,7 +15,7 @@ A free service to monitor sold-out RegioJet tickets and notify users when seats 
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/ticketsniper.git
+   git clone https://github.com/lukaskotrbaty/ticketsniper.git
    cd ticketsniper
    ```
 
