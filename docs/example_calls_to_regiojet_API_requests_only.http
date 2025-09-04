@@ -1,0 +1,33 @@
+### EXAMPLE CALLS TO REGIOJET API
+
+### Call to search routes from BRNO main station to PRAHA main station with simple search
+### Do not forget to change the date
+
+GET https://brn-ybus-pubapi.sa.cz/restapi/routes/search/simple?departureDate=2025-04-16&fromLocationId=3088864001&toLocationId=372825000&fromLocationType=STATION&toLocationType=STATION
+Accept: application/json
+X-Lang: cs
+X-Currency: CZK
+
+### Call to search routes from BRNO main station to PRAHA main station with normal search
+### This contains information about available seats in specific seat classes
+### Do not forget to change the date
+
+GET https://brn-ybus-pubapi.sa.cz/restapi/routes/search?departureDate=2025-04-16&fromLocationId=3088864001&toLocationId=372825000&fromLocationType=STATION&toLocationType=STATION
+Accept: application/json
+X-Lang: cs
+X-Currency: CZK
+
+
+### Call to search specific route
+### Used for finding the info about classes and number of free seats in them
+### Do not forget to change the routeID
+
+GET https://brn-ybus-pubapi.sa.cz/restapi/routes/7558895449/simple?fromStationId=3088864001&toStationId=372825000
+
+### Call to buy tickets
+
+GET https://regiojet.cz/?departureDate=2025-03-21&fromLocationId=3088864001&toLocationId=372825000&fromLocationType=STATION&toLocationType=STATION
+### Call to get all locations
+
+GET https://brn-ybus-pubapi.sa.cz/restapi/consts/locations
+X-Lang: cs

@@ -1,0 +1,62 @@
+# =========================================
+# IDE & Editor Config
+# =========================================
+.idea/
+.vscode/
+
+# =========================================
+# OS-generated files & Logs
+# =========================================
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =========================================
+# Backend (Python, FastAPI)
+# =========================================
+# Virtual environments
+/app/.venv
+/app/venv
+/app/env
+
+# Byte-compiled / optimized files
+__pycache__/
+*.pyc
+
+# Test & Coverage artifacts
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Celery artifacts
+celerybeat-schedule
+celerybeat.pid
+
+# =========================================
+# Frontend (Node, Vue, Vite)
+# =========================================
+# Dependencies
+/frontend/node_modules
+
+# Build output
+/frontend/dist
+/frontend/dist-ssr
+/frontend/.vite
+
+# Test & Coverage artifacts
+/frontend/coverage/
+
+# Local environment files for Vite
+/frontend/.env.local
+/frontend/.env.*.local
+
+# =========================================
+# General Environment variables
+# =========================================
+# Ignore all .env files, but keep the example
+.env*
+!.env.example

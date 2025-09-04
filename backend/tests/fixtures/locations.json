@@ -1,0 +1,50 @@
+[
+  {
+    "country": "Česká republika",
+    "cities": [
+      {
+        "id": 10202000,
+        "name": "Praha",
+        "stations": [
+          {
+            "id": 372825000,
+            "fullname": "Praha hl.n.",
+            "name": "Praha hl.n."
+          },
+          {
+            "id": 372829003,
+            "fullname": "Praha, Černý Most",
+            "name": "Praha, Černý Most"
+          }
+        ]
+      },
+      {
+        "id": 10204000,
+        "name": "Brno",
+        "stations": [
+          {
+            "id": 3088864001,
+            "fullname": "Brno, AN u hotelu Grand",
+            "name": "Brno, Grand"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "country": "Slovensko",
+    "cities": [
+      {
+        "id": 10205003,
+        "name": "Bratislava",
+        "stations": [
+          {
+            "id": 1841058000,
+            "fullname": "Bratislava,,AS",
+            "name": "Bratislava - MS"
+          }
+        ]
+      }
+    ]
+  }
+]

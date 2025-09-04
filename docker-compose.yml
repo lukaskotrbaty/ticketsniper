@@ -1,0 +1,165 @@
+volumes:
+  postgres_data:
+  redis_data:
+  flower_data:
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: ticket_sniper_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - ./docker/db/init-test-db.sh:/docker-entrypoint-initdb.d/init-test-db.sh
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: ticket_sniper_redis
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: development
+    container_name: ticket_sniper_backend
+    volumes:
+      - ./backend:/code
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import sys, urllib.request; sys.exit(0) if urllib.request.urlopen('http://localhost:8000/api/v1/health').getcode() == 200 else sys.exit(1)\""]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  celery_worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: development
+    container_name: ticket_sniper_celery_worker
+    command: poetry run celery -A app.worker.celery_app worker --loglevel=info
+    volumes:
+      - ./backend:/code
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "poetry", "run", "celery", "-A", "app.worker.celery_app", "status"]
+      interval: 30s
+      timeout: 20s
+      retries: 5
+      start_period: 60s
+    depends_on:
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  celery_beat:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: development
+    container_name: ticket_sniper_celery_beat
+    command: poetry run celery -A app.worker.celery_app beat --loglevel=info --schedule=/var/run/celery/celerybeat-schedule --pidfile=/var/run/celery/celerybeat.pid
+    volumes:
+      - ./backend:/code
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "test", "-f", "/var/run/celery/celerybeat.pid"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  flower:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: development
+    container_name: ticket_sniper_flower
+    command: poetry run celery -A app.worker.celery_app flower --address=0.0.0.0 --port=5555 --basic_auth=${FLOWER_USER}:${FLOWER_PASSWORD} --max-tasks=5000
+    volumes:
+      - ./backend:/code
+    ports:
+      - "5555:5555"
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD-SHELL", "poetry run python -c 'import sys, urllib.request; sys.exit(0) if urllib.request.urlopen(\"http://localhost:5555/healthcheck\").getcode() == 200 else sys.exit(1)'"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      redis:
+        condition: service_healthy
+      celery_worker:
+        condition: service_started
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development
+    container_name: ticket_sniper_frontend
+    command: npm run dev -- --host
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "8080:8080"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    depends_on:
+      - backend
+    restart: unless-stopped

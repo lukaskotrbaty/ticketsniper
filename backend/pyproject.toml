@@ -1,0 +1,52 @@
+[tool.poetry]
+name = "ticket-sniper-backend"
+version = "0.1.0"
+description = "Backend for the Ticket Sniper application"
+authors = ["Lukas <lukas.pribyl.dev@gmail.com>"]
+readme = "README.md"
+packages = [{include = "app"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "*"
+uvicorn = {extras = ["standard"], version = "*"}
+sqlalchemy = {extras = ["asyncio"], version = "*"}
+asyncpg = "*"
+psycopg2-binary = "*"
+redis = "*"
+celery = "*"
+httpx = "*"
+pydantic-settings = "*"
+python-jose = {extras = ["cryptography"], version = "*"}
+passlib = {extras = ["bcrypt"], version = "*"}
+python-multipart = "*"
+email-validator = "*"
+flower = "*"
+sqladmin = "0.16.1"
+itsdangerous = "*"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "*"
+pytest-asyncio = "*"
+pytest-cov = "*"
+respx = "*"
+pytest-dotenv = "*"
+aiosqlite = "^0.21.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "."
+]
+asyncio_mode = "auto"
+addopts = "--cov=app --cov-report=term-missing"
+filterwarnings = [
+    "ignore::DeprecationWarning:passlib.*",
+    "ignore::pydantic.warnings.PydanticDeprecatedSince20"
+]
+
+[tool.pytest_dotenv]
+dotenv_file = ".env.test"

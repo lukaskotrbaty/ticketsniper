@@ -1,0 +1,31 @@
+{
+  "routes": [
+    {
+      "id": 7558895449,
+      "departureTime": "2025-08-15T10:30:00.000+02:00",
+      "arrivalTime": "2025-08-15T13:00:00.000+02:00",
+      "freeSeatsCount": 5,
+      "vehicleTypes": ["TRAIN"],
+      "departureStationId": 3088864001,
+      "arrivalStationId": 372825000
+    },
+    {
+      "id": 7558895451,
+      "departureTime": "2025-08-15T12:30:00.000+02:00",
+      "arrivalTime": "2025-08-15T15:00:00.000+02:00",
+      "freeSeatsCount": 0,
+      "vehicleTypes": ["BUS"],
+      "departureStationId": 3088864001,
+      "arrivalStationId": 372825000
+    },
+    {
+      "id": 7558895452,
+      "departureTime": "2025-08-16T09:00:00.000+02:00",
+      "arrivalTime": "2025-08-16T11:30:00.000+02:00",
+      "freeSeatsCount": 12,
+      "vehicleTypes": ["TRAIN"],
+      "departureStationId": 3088864001,
+      "arrivalStationId": 372825000
+    }
+  ]
+}
