@@ -22,6 +22,7 @@ A free service to monitor sold-out RegioJet tickets and notify users when seats 
 2. **Set up environment variables**
    ```bash
    cp .env.example .env
+   cp frontend/.env.example frontend/.env
    # Edit .env file with your configuration
    ```
 
