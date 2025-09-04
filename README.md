@@ -28,7 +28,7 @@ A free service to monitor sold-out RegioJet tickets and notify users when seats 
 
 3. **Start all services**
    ```bash
-   docker-compose up -d
+   docker-compose up --build
    ```
 
 4. **Access the application**
